@@ -22,7 +22,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const ResumeConfig = {
-  resumeCount: Number(process.env.RESUME_COUNT) || 1,
+  resumeCount: Number(process.env.RESUME_COUNT) || 3,
   educationCount: Number(process.env.EDUCATION_COUNT) || 10,
   experienceCount: Number(process.env.EXPERIENCE_COUNT) || 10,
   projectCount: Number(process.env.PROJECT_COUNT) || 10,
