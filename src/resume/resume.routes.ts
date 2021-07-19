@@ -22,6 +22,7 @@ import { Router } from 'express';
 import {
   getResume,
   newResume,
+  newResumeCopy,
   updateEEPCP,
   updateTemplate,
 } from './resume.controller';
@@ -45,7 +46,9 @@ import { templateSpacingValidation } from './validators/template/spacing.validat
 
 const router = Router();
 
-router.post('/', newResume);
+router.get('/new', newResume);
+
+router.get('/new/:id', newResumeCopy);
 
 router.get('/:id', getResume);
 
