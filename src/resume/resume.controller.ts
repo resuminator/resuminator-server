@@ -19,7 +19,7 @@
 */
 
 import { Request, Response } from 'express';
-import { model } from 'mongoose';
+import { model, Types } from 'mongoose';
 import { ResumeConfig } from '../config/resume.config';
 import { findMeta } from '../resumeMeta/meta.controller';
 import { ResumeSchema } from './resume.model';
@@ -35,6 +35,52 @@ const newResume = async (req: Request, res: Response): Promise<any> => {
         username: req.username,
       });
       createResume.save((err: any, resume: any) => {
+        if (resume) {
+          const newActive = {
+            _id: resume.id,
+            profileName: `Untitled${length}`,
+            webid: '',
+            icon: '📄',
+            isPublic: false,
+            isTemplate: false,
+            color: 'blue',
+          };
+
+          meta.active.push(newActive);
+          meta.save((err: any, metaResume: any) => {
+            if (metaResume) {
+              return res.status(200).json(metaResume);
+            }
+            if (err) {
+              return res.status(400).json(err);
+            }
+          });
+        }
+        if (err) {
+          return res.status(400).json(err);
+        }
+      });
+    } else {
+      res.status(409).json({
+        message: 'Limit Exceeded',
+      });
+    }
+  } catch (error) {
+    res.status(error.code).json({
+      message: error.message,
+    });
+  }
+};
+
+const newResumeCopy = async (req: Request, res: Response) => {
+  try {
+    const meta = await findMeta(req.username);
+    const length = meta.active.length;
+    if (length < ResumeConfig.resumeCount) {
+      const resume = await findResume(req.params.id, req.username);
+      resume._id = Types.ObjectId();
+      resume.isNew = true;
+      resume.save((err: any, resume: any) => {
         if (resume) {
           const newActive = {
             _id: resume.id,
@@ -155,4 +201,4 @@ async function findResume(id: string, username: string) {
   }
 }
 
-export { newResume, getResume, updateEEPCP, updateTemplate };
+export { newResume, getResume, updateEEPCP, updateTemplate, newResumeCopy };
