@@ -119,7 +119,6 @@ const updateTemplate =
         const result = await resume.save();
         res.status(200).json(result);
       } catch (error) {
-        console.log(error);
         res.status(418).json({
           message: 'Something Went Wrong',
         });

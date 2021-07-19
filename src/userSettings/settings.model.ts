@@ -18,17 +18,36 @@
     along with Resuminator Backend.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Router } from 'express';
-import {
-  deleteAccount,
-  accountData,
-  accountDataRequest,
-} from './settings.controller';
+import { Schema } from 'mongoose';
 
-const router = Router();
-
-router.get('/account', accountData);
-router.get('/account/request', accountDataRequest);
-router.delete('/account', deleteAccount);
-
-export default router;
+export const RequestAccountData = new Schema(
+  {
+    requestedOn: {
+      type: Date,
+      trim: true,
+      default: null,
+    },
+    completedBy: {
+      type: Date,
+      trim: true,
+      default: null,
+    },
+    uid: {
+      type: String,
+      requied: true,
+      trim: true,
+      unique: true,
+    },
+    isCompleted: {
+      type: Boolean,
+      trim: true,
+      default: null,
+    },
+    completedOn: {
+      type: Date,
+      trim: true,
+      default: null,
+    },
+  },
+  { timestamps: true },
+);

@@ -20,8 +20,12 @@
 
 import { Request, Response } from 'express';
 import * as admin from 'firebase-admin';
+import { model } from 'mongoose';
 import { Resume } from '../resume/resume.controller';
 import { Meta } from '../resumeMeta/meta.controller';
+import { RequestAccountData } from './settings.model';
+
+export const AccountData = model('AccountData', RequestAccountData);
 
 const deleteAccount = async (req: Request, res: Response) => {
   try {
@@ -30,6 +34,9 @@ const deleteAccount = async (req: Request, res: Response) => {
       username: req.username,
     });
     await Meta.deleteOne({
+      uid: req.username,
+    });
+    await AccountData.deleteOne({
       uid: req.username,
     });
     res.status(200).json({
@@ -42,4 +49,75 @@ const deleteAccount = async (req: Request, res: Response) => {
   }
 };
 
-export { deleteAccount };
+const accountData = async (req: Request, res: Response) => {
+  try {
+    const settings = await getSettings(req.username);
+    res.status(200).json(settings);
+  } catch (error) {
+    res.status(error.code).json({
+      message: error.message,
+    });
+  }
+};
+
+const accountDataRequest = async (req: Request, res: Response) => {
+  try {
+    const settings = await getSettings(req.username);
+    if (settings.completedBy < Date.now()) {
+      settings.requestedOn = Date.now();
+      settings.completedBy = Date.now() + 18 * 24 * 60 * 60 * 1000;
+      settings.isCompleted = false;
+      try {
+        const result = await settings.save();
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(418).json({
+          message: 'Something Went Wrong',
+        });
+      }
+    } else {
+      res.status(409).json({
+        message:
+          'Either one of your request still in process or Its not been 14 working days to your last request',
+      });
+    }
+  } catch (error) {
+    res.status(error.code).json({
+      message: error.message,
+    });
+  }
+};
+
+async function getSettings(uid: string) {
+  try {
+    const settings = await AccountData.findOne({
+      uid: uid,
+    });
+    if (settings) {
+      return settings;
+    } else {
+      throw 404;
+    }
+  } catch (error) {
+    if (error === 404) {
+      throw {
+        code: 404,
+        message: 'Not Found',
+      };
+    } else
+      throw {
+        code: 400,
+        message: 'Bad Request',
+      };
+  }
+}
+
+export async function createSettings(uid: string) {
+  const settings = new AccountData({
+    uid: uid,
+  });
+  const result = await settings.save();
+  return result;
+}
+
+export { deleteAccount, accountData, accountDataRequest };
