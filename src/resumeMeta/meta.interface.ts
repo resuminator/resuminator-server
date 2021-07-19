@@ -21,20 +21,20 @@
 import { Document } from 'mongoose';
 
 interface activeResume {
-  readonly _id: string;
-  readonly profileName: string;
-  readonly webid: string;
-  readonly icon: string;
-  readonly isPublic: boolean;
-  readonly isTemplate: boolean;
-  readonly color: string;
+  _id: string;
+  profileName: string;
+  webid: string;
+  icon: string;
+  isPublic: boolean;
+  isTemplate: boolean;
+  color: string;
 }
 
 export interface ResumeMeta extends Document {
-  readonly uid: string;
-  readonly isBanned: number;
-  readonly fullName: string;
-  readonly email: string;
-  readonly image: string;
-  readonly active: [activeResume];
+  uid: string;
+  isBanned: number;
+  fullName: string;
+  email: string;
+  image: string;
+  active: [activeResume];
 }

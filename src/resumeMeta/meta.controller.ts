@@ -69,6 +69,34 @@ const deleteMeta = async (req: Request, res: Response) => {
   }
 };
 
+const updateMeta = async (req: Request, res: Response) => {
+  try {
+    const meta = await findMeta(req.username);
+    const index = meta.active.findIndex(function (element: any) {
+      return element.id === req.params.id;
+    });
+    if (index === -1) {
+      res.status(409).json({
+        message: "Resume Doesn't Exist On Profile",
+      });
+    } else {
+      Object.assign(meta.active[index], req.body);
+      try {
+        const result = await meta.save();
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(418).json({
+          message: 'Something Went Wrong',
+        });
+      }
+    }
+  } catch (error) {
+    res.status(error.code).json({
+      message: error.message,
+    });
+  }
+};
+
 async function deleteResume(id: string) {
   try {
     const result = await Resume.findByIdAndDelete(id);
@@ -148,4 +176,4 @@ async function createMeta(id: string) {
   return result;
 }
 
-export { getMeta, deleteMeta };
+export { getMeta, deleteMeta, updateMeta };

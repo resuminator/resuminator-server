@@ -20,7 +20,7 @@
 import * as Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { string } from 'joi';
-import { validateRequest } from '../main.validator';
+import { validateRequest } from '../../../common/main.validator';
 import { ResumeConfig } from '../../../config/resume.config';
 
 const skillDataValidation = (

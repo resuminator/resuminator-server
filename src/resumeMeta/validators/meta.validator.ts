@@ -19,26 +19,17 @@
 */
 
 import * as Joi from 'joi';
-import { string } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { validateRequest } from '../../common/main.validator';
-import { ResumeConfig } from '../../config/resume.config';
 
-const projectValidation = (req: Request, res: Response, next: NextFunction) => {
-  const base = Joi.object().keys({
-    _id: Joi.string().required(),
-    isHidden: Joi.boolean().required(),
-    projectName: Joi.string().required(),
-    start: Joi.date().required(),
-    end: [Joi.date().optional(), Joi.allow(null)],
-    description: Joi.string().required(),
-    link: Joi.string().uri().required(),
-    tags: Joi.array().items(string()),
-  });
-
-  const schema = Joi.array().max(ResumeConfig.projectCount).items(base);
+const metaValidation = (req: Request, res: Response, next: NextFunction) => {
+  const schema = Joi.object({
+    profileName: Joi.string(),
+    icon: Joi.string(),
+    color: Joi.string(),
+  }).required();
 
   validateRequest(req, res, next, schema);
 };
 
-export { projectValidation };
+export { metaValidation };

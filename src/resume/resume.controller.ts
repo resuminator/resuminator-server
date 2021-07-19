@@ -29,7 +29,8 @@ export const Resume = model('Resume', ResumeSchema);
 const newResume = async (req: Request, res: Response): Promise<any> => {
   try {
     const meta = await findMeta(req.username);
-    if (meta.active.length < ResumeConfig.resumeCount) {
+    const length = meta.active.length;
+    if (length < ResumeConfig.resumeCount) {
       const createResume = new Resume({
         username: req.username,
       });
@@ -37,12 +38,12 @@ const newResume = async (req: Request, res: Response): Promise<any> => {
         if (resume) {
           const newActive = {
             _id: resume.id,
-            profileName: '',
+            profileName: `Untitled${length}`,
             webid: '',
-            icon: '',
+            icon: '📄',
             isPublic: false,
             isTemplate: false,
-            color: '',
+            color: 'blue',
           };
 
           meta.active.push(newActive);
@@ -94,7 +95,6 @@ const updateEEPCP =
         const result = await resume.save();
         res.status(200).json(result);
       } catch (error) {
-        console.log(error);
         res.status(418).json({
           message: 'Something Went Wrong',
         });
