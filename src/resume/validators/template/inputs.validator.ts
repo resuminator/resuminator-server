@@ -21,7 +21,7 @@
 import * as Joi from 'joi';
 import { string } from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import { validateRequest } from '../main.validator';
+import { validateRequest } from '../../../common/main.validator';
 
 const templateInputValidation = (
   req: Request,
