@@ -21,6 +21,7 @@
 import { Request, Response } from 'express';
 import { model } from 'mongoose';
 import { Resume } from '../resume/resume.controller';
+import { createSettings } from '../userSettings/settings.controller';
 import { ResumeMeta } from './meta.interface';
 import { ResumeMetaSchema } from './meta.model';
 
@@ -119,7 +120,10 @@ async function findMetaAndCreate(id: string) {
       return meta;
     } else {
       meta = await createMeta(id);
-      return meta;
+      const settings = await createSettings(id);
+      if (settings && meta) {
+        return meta;
+      }
     }
   } catch (error) {
     if (error.code === 11000) {
