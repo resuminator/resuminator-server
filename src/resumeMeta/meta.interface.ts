@@ -35,6 +35,5 @@ export interface ResumeMeta extends Document {
   isBanned: number;
   fullName: string;
   email: string;
-  image: string;
   active: [activeResume];
 }

@@ -75,12 +75,6 @@ router.patch(
 );
 
 router.patch(
-  '/publication/:id',
-  publicationValidation,
-  updateEEPCP('publications'),
-);
-
-router.patch(
   '/customsection/:id',
   customSectionValidation,
   updateEEPCP('customSection'),
