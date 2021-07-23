@@ -31,7 +31,7 @@ const skillDataValidation = (
   const base = Joi.object().keys({
     _id: Joi.string().required(),
     isHidden: Joi.boolean().required(),
-    category: Joi.string().required(),
+    category: Joi.string().allow('').required(),
     skillsList: Joi.array().items(string()).required(),
   });
 
