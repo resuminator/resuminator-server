@@ -30,8 +30,8 @@ const customSectionValidation = (
 ) => {
   const inputs = Joi.object().keys({
     _id: Joi.string().required(),
-    type: Joi.string().required(),
-    name: Joi.string().required(),
+    type: Joi.string().allow('').required(),
+    name: Joi.string().allow('').required(),
   });
 
   const data = Joi.object().keys({
@@ -42,7 +42,7 @@ const customSectionValidation = (
 
   const base = Joi.object().keys({
     _id: Joi.string().required(),
-    header: Joi.string().required(),
+    header: Joi.string().allow('').required(),
     hasTitleRow: Joi.boolean().required(),
     inputs: Joi.array().items(inputs).required(),
     data: Joi.array().items(data).required(),

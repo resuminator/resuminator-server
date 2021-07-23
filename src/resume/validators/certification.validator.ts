@@ -31,12 +31,12 @@ const certificateValidation = (
   const base = Joi.object().keys({
     _id: Joi.string().required(),
     isHidden: Joi.boolean().required(),
-    certificateName: Joi.string().required(),
-    authority: Joi.string().required(),
-    credentialNumber: Joi.string().required(),
+    certificateName: Joi.string().allow('').required(),
+    authority: Joi.string().allow('').required(),
+    credentialNumber: Joi.string().allow('').required(),
     start: Joi.date().required(),
     end: [Joi.date().optional(), Joi.allow(null)],
-    link: Joi.string().uri().required(),
+    link: Joi.string().uri().allow('').required(),
   });
 
   const schema = Joi.array().max(ResumeConfig.certificationCount).items(base);

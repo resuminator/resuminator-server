@@ -27,7 +27,7 @@ const jobTitleValidation = (
   next: NextFunction,
 ) => {
   const schema = Joi.object({
-    jobTitle: Joi.string().required(),
+    jobTitle: Joi.string().allow('').required(),
   });
 
   validateRequest(req, res, next, schema);

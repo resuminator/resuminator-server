@@ -24,7 +24,7 @@ import { validateRequest } from '../../../common/main.validator';
 
 const nameValidation = (req: Request, res: Response, next: NextFunction) => {
   const schema = Joi.object({
-    fullName: Joi.string().required(),
+    fullName: Joi.string().allow('').required(),
   });
 
   validateRequest(req, res, next, schema);

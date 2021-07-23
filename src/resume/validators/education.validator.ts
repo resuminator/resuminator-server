@@ -31,15 +31,15 @@ const educationValidation = (
   const base = Joi.object().keys({
     _id: Joi.string().required(),
     isHidden: Joi.boolean().required(),
-    institute: Joi.string().required(),
-    location: Joi.string().required(),
-    degree: Joi.string().required(),
-    stream: Joi.string().required(),
+    institute: Joi.string().allow('').required(),
+    location: Joi.string().allow('').required(),
+    degree: Joi.string().allow('').required(),
+    stream: Joi.string().allow('').required(),
     gradeObtained: Joi.number().required(),
     gradeMax: Joi.number().required(),
     start: Joi.date().required(),
     end: [Joi.date().optional(), Joi.allow(null)],
-    description: Joi.string().required(),
+    description: Joi.string().allow('').required(),
   });
 
   const schema = Joi.array().max(ResumeConfig.educationCount).items(base);

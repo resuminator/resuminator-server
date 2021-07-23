@@ -191,7 +191,7 @@ async function findResume(id: string, username: string) {
     if (error === 404) {
       throw {
         code: 404,
-        message: 'Not Found',
+        message: 'Resume not Found',
       };
     } else
       throw {
