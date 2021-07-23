@@ -394,7 +394,7 @@ export const ResumeSchema = new Schema(
         data: [],
       },
     },
-    customSection: {
+    customSections: {
       type: [customSection],
       required: true,
       trim: true,

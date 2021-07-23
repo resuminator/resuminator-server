@@ -77,7 +77,7 @@ router.patch(
 router.patch(
   '/customsection/:id',
   customSectionValidation,
-  updateEEPCP('customSection'),
+  updateEEPCP('customSections'),
 );
 
 router.patch(
