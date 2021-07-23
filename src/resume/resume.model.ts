@@ -332,10 +332,10 @@ export const ResumeSchema = new Schema(
           'SKILLS',
         ],
         layout: {
-          header: [['USER_IMAGE', 'NAME_AND_JT'], ['SOCIAL_HANDLES']],
+          header: [['NAME_AND_JT', 'USER_IMAGE'], ['SOCIAL_HANDLES']],
           body: [
             ['EXPERIENCE', 'PROJECTS', 'EDUCATION'],
-            ['SKILLS', 'PUBLICATIONS'],
+            ['SKILLS', 'CERTIFICATIONS' ,'PUBLICATIONS'],
           ],
           footer: ['WATERMARK'],
         },
