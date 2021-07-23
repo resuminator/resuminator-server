@@ -24,9 +24,9 @@ import { validateRequest } from '../../../common/main.validator';
 
 const socialValidation = (req: Request, res: Response, next: NextFunction) => {
   const base = Joi.object().keys({
-    label: Joi.string().required(),
+    label: Joi.string().allow('').required(),
     isHidden: Joi.boolean().required(),
-    link: Joi.string().required(),
+    link: Joi.string().allow('').required(),
   });
 
   const schema = Joi.object({
