@@ -27,6 +27,8 @@ import utils from './utils/utils.routes';
 import mongoose from 'mongoose';
 import { decodeIDToken } from './middleware/authenticate.middleware';
 import { MongoConfig } from './config/mongodb.config';
+import PostHog from 'posthog-node';
+import { PostHogConfig } from './config/posthog.config';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -48,6 +50,10 @@ mongoose.connect(
     }
   },
 );
+
+export const client = new PostHog(PostHogConfig.apiKey, {
+  host: PostHogConfig.host,
+});
 
 app.use(cors());
 app.use(express.json());

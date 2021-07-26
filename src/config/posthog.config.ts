@@ -17,10 +17,12 @@
     You should have received a copy of the GNU General Public License
     along with Resuminator Backend.  If not, see <https://www.gnu.org/licenses/>.
 */
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-declare namespace Express {
-  interface Request {
-    username: string;
-    email: string;
-  }
-}
+const PostHogConfig = {
+  apiKey: process.env.POSTHOG_API_KEY || '',
+  host: process.env.POSTHOG_HOST || 'https://app.posthog.com',
+};
+
+export { PostHogConfig };

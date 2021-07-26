@@ -19,12 +19,12 @@
 */
 
 import { Router } from 'express';
-import { deleteMeta, getMeta, updateMeta } from './meta.controller';
+import { deleteResume, getMeta, updateMeta } from './meta.controller';
 
 const router = Router();
 
 router.get('/', getMeta);
 router.patch('/:id', updateMeta);
-router.delete('/:id', deleteMeta);
+router.delete('/:id', deleteResume);
 
 export default router;
