@@ -20,6 +20,7 @@
 
 import { Request, Response } from 'express';
 import { model, Types } from 'mongoose';
+import { client } from '..';
 import { ResumeConfig } from '../config/resume.config';
 import { findMeta } from '../resumeMeta/meta.controller';
 import { ResumeSchema } from './resume.model';
@@ -49,6 +50,10 @@ const newResume = async (req: Request, res: Response): Promise<any> => {
           meta.active.push(newActive);
           meta.save((err: any, metaResume: any) => {
             if (metaResume) {
+              client.capture({
+                distinctId: req.username,
+                event: 'New Resume',
+              });
               return res.status(200).json(metaResume);
             }
             if (err) {
@@ -95,6 +100,10 @@ const newResumeCopy = async (req: Request, res: Response) => {
           meta.active.push(newActive);
           meta.save((err: any, metaResume: any) => {
             if (metaResume) {
+              client.capture({
+                distinctId: req.username,
+                event: 'Clone Resume',
+              });
               return res.status(200).json(metaResume);
             }
             if (err) {
@@ -121,6 +130,10 @@ const newResumeCopy = async (req: Request, res: Response) => {
 const getResume = async (req: Request, res: Response) => {
   try {
     const resume = await findResume(req.params.id, req.username);
+    client.capture({
+      distinctId: req.username,
+      event: 'Retrieve Resume',
+    });
     res.status(200).json(resume);
   } catch (error) {
     res.status(error.code).json({
@@ -139,6 +152,13 @@ const updateEEPCP =
       resume.markModified(section);
       try {
         const result = await resume.save();
+        client.capture({
+          distinctId: req.username,
+          event: 'Resume Updated',
+          properties: {
+            section: section,
+          },
+        });
         res.status(200).json(result);
       } catch (error) {
         res.status(418).json({
@@ -163,6 +183,14 @@ const updateTemplate =
       resume.markModified(section);
       try {
         const result = await resume.save();
+        client.capture({
+          distinctId: req.username,
+          event: 'Resume Updated',
+          properties: {
+            section: section,
+            subsection: subsection,
+          },
+        });
         res.status(200).json(result);
       } catch (error) {
         res.status(418).json({

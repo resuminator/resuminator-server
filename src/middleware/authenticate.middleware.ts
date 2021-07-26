@@ -42,6 +42,7 @@ async function decodeIDToken(req: Request, res: Response, next: NextFunction) {
       const decodedToken = await admin.auth().verifyIdToken(idToken);
       if (decodedToken.email_verified) {
         req.username = decodedToken.uid;
+        req.email = decodedToken.email || '';
       } else {
         return res.status(403).json({
           message: 'User Not Verified',

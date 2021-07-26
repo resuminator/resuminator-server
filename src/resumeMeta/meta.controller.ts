@@ -20,6 +20,7 @@
 
 import { Request, Response } from 'express';
 import { model } from 'mongoose';
+import { client } from '..';
 import { Resume } from '../resume/resume.controller';
 import { createSettings } from '../userSettings/settings.controller';
 import { ResumeMeta } from './meta.interface';
@@ -29,7 +30,11 @@ export const Meta = model('Meta', ResumeMetaSchema);
 
 const getMeta = async (req: Request, res: Response) => {
   try {
-    const meta = await findMetaAndCreate(req.username);
+    const meta = await findMetaAndCreate(req.username, req.email);
+    client.capture({
+      distinctId: req.username,
+      event: 'Retrieve ResumeMeta',
+    });
     res.status(200).json(meta);
   } catch (error) {
     res.status(error.code).json({
@@ -38,7 +43,7 @@ const getMeta = async (req: Request, res: Response) => {
   }
 };
 
-const deleteMeta = async (req: Request, res: Response) => {
+const deleteResume = async (req: Request, res: Response) => {
   try {
     const meta = await findMeta(req.username);
     const index = meta.active.findIndex(function (element: any) {
@@ -49,11 +54,15 @@ const deleteMeta = async (req: Request, res: Response) => {
         message: "Resume Doesn't Exist On Profile",
       });
     } else {
-      const result = await deleteResume(req.params.id);
+      const result = await deleteResumebyId(req.params.id);
       if (result) {
         meta.active.splice(index, 1);
         meta.save((err: any, metaResume: ResumeMeta) => {
           if (metaResume) {
+            client.capture({
+              distinctId: req.username,
+              event: 'Resume Deleted',
+            });
             return res.status(200).json(metaResume);
           }
           if (err) {
@@ -83,6 +92,10 @@ const updateMeta = async (req: Request, res: Response) => {
       Object.assign(meta.active[index], req.body);
       try {
         const result = await meta.save();
+        client.capture({
+          distinctId: req.username,
+          event: 'Update ResumeMeta',
+        });
         res.status(200).json(result);
       } catch (error) {
         res.status(418).json({
@@ -97,7 +110,7 @@ const updateMeta = async (req: Request, res: Response) => {
   }
 };
 
-async function deleteResume(id: string) {
+async function deleteResumebyId(id: string) {
   try {
     const result = await Resume.findByIdAndDelete(id);
     if (result === null) {
@@ -141,7 +154,7 @@ export async function findMeta(username: string): Promise<ResumeMeta> {
   }
 }
 
-async function findMetaAndCreate(id: string) {
+async function findMetaAndCreate(id: string, email: string) {
   try {
     let meta = await Meta.findOne({ uid: id });
     if (meta) {
@@ -150,6 +163,12 @@ async function findMetaAndCreate(id: string) {
       meta = await createMeta(id);
       const settings = await createSettings(id);
       if (settings && meta) {
+        client.identify({
+          distinctId: id,
+          properties: {
+            email: email,
+          },
+        });
         return meta;
       }
     }
@@ -176,4 +195,4 @@ async function createMeta(id: string) {
   return result;
 }
 
-export { getMeta, deleteMeta, updateMeta };
+export { getMeta, deleteResume, updateMeta };
