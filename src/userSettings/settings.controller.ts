@@ -22,6 +22,7 @@ import { Request, Response } from 'express';
 import * as admin from 'firebase-admin';
 import { model } from 'mongoose';
 import { client } from '..';
+import { MainConfig } from '../config/main.config';
 import { Resume } from '../resume/resume.controller';
 import { Meta } from '../resumeMeta/meta.controller';
 import { RequestAccountData } from './settings.model';
@@ -43,6 +44,9 @@ const deleteAccount = async (req: Request, res: Response) => {
     client.capture({
       distinctId: req.username,
       event: 'Account Deleted',
+      properties: {
+        environment: MainConfig.env,
+      },
     });
     res.status(200).json({
       message: 'Deleted',
@@ -77,6 +81,9 @@ const accountDataRequest = async (req: Request, res: Response) => {
         client.capture({
           distinctId: req.username,
           event: 'Account Data Request',
+          properties: {
+            environment: MainConfig.env,
+          },
         });
         res.status(200).json(result);
       } catch (error) {
