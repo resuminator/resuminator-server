@@ -21,6 +21,7 @@
 import { Request, Response } from 'express';
 import { model } from 'mongoose';
 import { client } from '..';
+import { MainConfig } from '../config/main.config';
 import { Resume } from '../resume/resume.controller';
 import { createSettings } from '../userSettings/settings.controller';
 import { ResumeMeta } from './meta.interface';
@@ -34,6 +35,9 @@ const getMeta = async (req: Request, res: Response) => {
     client.capture({
       distinctId: req.username,
       event: 'Retrieve ResumeMeta',
+      properties: {
+        environment: MainConfig.env,
+      },
     });
     res.status(200).json(meta);
   } catch (error) {
@@ -62,6 +66,9 @@ const deleteResume = async (req: Request, res: Response) => {
             client.capture({
               distinctId: req.username,
               event: 'Resume Deleted',
+              properties: {
+                environment: MainConfig.env,
+              },
             });
             return res.status(200).json(metaResume);
           }
@@ -95,6 +102,9 @@ const updateMeta = async (req: Request, res: Response) => {
         client.capture({
           distinctId: req.username,
           event: 'Update ResumeMeta',
+          properties: {
+            environment: MainConfig.env,
+          },
         });
         res.status(200).json(result);
       } catch (error) {

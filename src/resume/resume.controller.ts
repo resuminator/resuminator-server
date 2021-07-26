@@ -21,6 +21,7 @@
 import { Request, Response } from 'express';
 import { model, Types } from 'mongoose';
 import { client } from '..';
+import { MainConfig } from '../config/main.config';
 import { ResumeConfig } from '../config/resume.config';
 import { findMeta } from '../resumeMeta/meta.controller';
 import { ResumeSchema } from './resume.model';
@@ -53,6 +54,9 @@ const newResume = async (req: Request, res: Response): Promise<any> => {
               client.capture({
                 distinctId: req.username,
                 event: 'New Resume',
+                properties: {
+                  environment: MainConfig.env,
+                },
               });
               return res.status(200).json(metaResume);
             }
@@ -103,6 +107,9 @@ const newResumeCopy = async (req: Request, res: Response) => {
               client.capture({
                 distinctId: req.username,
                 event: 'Clone Resume',
+                properties: {
+                  environment: MainConfig.env,
+                },
               });
               return res.status(200).json(metaResume);
             }
@@ -133,6 +140,9 @@ const getResume = async (req: Request, res: Response) => {
     client.capture({
       distinctId: req.username,
       event: 'Retrieve Resume',
+      properties: {
+        environment: MainConfig.env,
+      },
     });
     res.status(200).json(resume);
   } catch (error) {
@@ -157,6 +167,7 @@ const updateEEPCP =
           event: 'Resume Updated',
           properties: {
             section: section,
+            environment: MainConfig.env,
           },
         });
         res.status(200).json(result);
@@ -189,6 +200,7 @@ const updateTemplate =
           properties: {
             section: section,
             subsection: subsection,
+            environment: MainConfig.env,
           },
         });
         res.status(200).json(result);
