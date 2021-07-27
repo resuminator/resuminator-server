@@ -32,7 +32,7 @@ const skillDataValidation = (
     _id: Joi.string().required(),
     isHidden: Joi.boolean().required(),
     category: Joi.string().allow('').required(),
-    skillsList: Joi.array().items(string()).required(),
+    skillsList: Joi.array().items(string().allow(null).allow('')).required(),
   });
 
   const schema = Joi.object({
