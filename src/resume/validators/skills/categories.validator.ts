@@ -27,7 +27,7 @@ const skillCategoryValidation = (
   next: NextFunction,
 ) => {
   const schema = Joi.object({
-    hasCategories: Joi.boolean().required(),
+    format: Joi.string().valid('CATEGORIES', 'TAGS').required(),
   });
 
   validateRequest(req, res, next, schema);
