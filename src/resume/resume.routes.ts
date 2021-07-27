@@ -123,25 +123,25 @@ router.patch(
 );
 
 router.patch(
-  '/contact/name/:id',
+  '/contact/fullName/:id',
   nameValidation,
   updateTemplate('contact', 'fullName'),
 );
 
 router.patch(
-  '/contact/image/:id',
+  '/contact/userImage/:id',
   imageValidation,
   updateTemplate('contact', 'userImage'),
 );
 
 router.patch(
-  '/contact/job/:id',
+  '/contact/jobTitle/:id',
   jobTitleValidation,
   updateTemplate('contact', 'jobTitle'),
 );
 
 router.patch(
-  '/contact/social/:id',
+  '/contact/contact/:id',
   socialValidation,
   updateTemplate('contact', 'contact'),
 );
