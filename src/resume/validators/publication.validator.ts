@@ -37,9 +37,9 @@ const publicationValidation = (
     volumeNumber: Joi.string().allow('').required(),
     issueNumber: Joi.string().allow('').required(),
     pages: Joi.number().allow('').required(),
-    year: Joi.number().required(),
+    year: Joi.number().allow('').required(),
     format: Joi.string().valid('MLA', 'AMA').required(),
-    doi: Joi.string().required(),
+    doi: Joi.string().allow('').required(),
   });
 
   const schema = Joi.array().max(ResumeConfig.publicationCount).items(base);
