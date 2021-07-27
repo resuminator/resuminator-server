@@ -27,6 +27,7 @@ const socialValidation = (req: Request, res: Response, next: NextFunction) => {
     label: Joi.string().allow('').required(),
     isHidden: Joi.boolean().required(),
     link: Joi.string().allow('').required(),
+    identifier: Joi.string().allow('').optional(),
   });
 
   const schema = Joi.object({
