@@ -60,6 +60,9 @@ const userContact = {
   isHidden: {
     type: Boolean,
   },
+  identifier: {
+    type: String,
+  },
 };
 
 const Contact = {
