@@ -111,9 +111,9 @@ router.patch(
 );
 
 router.patch(
-  '/skill/categories/:id',
+  '/skill/format/:id',
   skillCategoryValidation,
-  updateTemplate('skills', 'hasCategories'),
+  updateTemplate('skills', 'format'),
 );
 
 router.patch(

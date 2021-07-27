@@ -258,8 +258,8 @@ const skillData = {
 };
 
 const Skills = {
-  hasCategories: {
-    type: Boolean,
+  format: {
+    type: String,
   },
   data: {
     type: [skillData],
@@ -335,7 +335,7 @@ export const ResumeSchema = new Schema(
           header: [['NAME_AND_JT', 'USER_IMAGE'], ['SOCIAL_HANDLES']],
           body: [
             ['EXPERIENCE', 'PROJECTS', 'EDUCATION'],
-            ['SKILLS', 'CERTIFICATIONS' ,'PUBLICATIONS'],
+            ['SKILLS', 'CERTIFICATIONS', 'PUBLICATIONS'],
           ],
           footer: ['WATERMARK'],
         },
@@ -390,7 +390,7 @@ export const ResumeSchema = new Schema(
       required: true,
       trim: true,
       default: {
-        hasCategories: true,
+        format: 'CATEGORIES',
         data: [],
       },
     },
