@@ -159,7 +159,7 @@ const updateEEPCP =
       const change = req.body;
 
       resume[section] = change;
-      resume.markModified(section);
+      // resume.markModified(section);
       try {
         const result = await resume.save();
         client.capture({
