@@ -98,7 +98,7 @@ const newResumeCopy = async (req: Request, res: Response) => {
             icon: '📄',
             isPublic: false,
             isTemplate: false,
-            color: 'blue',
+            color: resume.template.color,
           };
 
           meta.active.push(newActive);
