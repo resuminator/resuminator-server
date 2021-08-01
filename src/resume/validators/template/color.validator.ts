@@ -28,7 +28,7 @@ const templateColorValidation = (
   next: NextFunction,
 ) => {
   const schema = Joi.object({
-    color: Joi.string().required,
+    color: Joi.string().required(),
   });
 
   validateRequest(req, res, next, schema);
