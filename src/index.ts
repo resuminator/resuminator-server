@@ -20,15 +20,16 @@
 
 import cors from 'cors';
 import express from 'express';
+import mongoose from 'mongoose';
+import PostHog from 'posthog-node';
+import unless from './common/unless';
+import { MongoConfig } from './config/mongodb.config';
+import { PostHogConfig } from './config/posthog.config';
+import { decodeIDToken } from './middleware/authenticate.middleware';
 import resume from './resume/resume.routes';
 import resumeMeta from './resumeMeta/meta.routes';
 import userSettings from './userSettings/settings.routes';
 import utils from './utils/utils.routes';
-import mongoose from 'mongoose';
-import { decodeIDToken } from './middleware/authenticate.middleware';
-import { MongoConfig } from './config/mongodb.config';
-import PostHog from 'posthog-node';
-import { PostHogConfig } from './config/posthog.config';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -57,7 +58,7 @@ export const client = new PostHog(PostHogConfig.apiKey, {
 
 app.use(cors());
 app.use(express.json());
-app.use(decodeIDToken);
+app.use(unless(decodeIDToken, '/v0.2.0'));
 app.use('/v0.2.0', utils);
 app.use('/v0.2.0/resume', resume);
 app.use('/v0.2.0/meta', resumeMeta);
