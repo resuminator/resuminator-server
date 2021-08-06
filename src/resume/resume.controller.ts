@@ -162,14 +162,6 @@ const updateEEPCP =
       // resume.markModified(section);
       try {
         const result = await resume.save();
-        client.capture({
-          distinctId: req.username,
-          event: 'Resume Updated',
-          properties: {
-            section: section,
-            environment: MainConfig.env,
-          },
-        });
         res.status(200).json(result);
       } catch (error) {
         res.status(418).json({
@@ -194,15 +186,6 @@ const updateTemplate =
       resume.markModified(section);
       try {
         const result = await resume.save();
-        client.capture({
-          distinctId: req.username,
-          event: 'Resume Updated',
-          properties: {
-            section: section,
-            subsection: subsection,
-            environment: MainConfig.env,
-          },
-        });
         res.status(200).json(result);
       } catch (error) {
         res.status(418).json({
