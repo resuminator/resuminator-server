@@ -30,6 +30,7 @@ import resume from './resume/resume.routes';
 import resumeMeta from './resumeMeta/meta.routes';
 import userSettings from './userSettings/settings.routes';
 import utils from './utils/utils.routes';
+import broadmap from './broadmap/broadmap.routes';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -58,8 +59,9 @@ export const client = new PostHog(PostHogConfig.apiKey, {
 
 app.use(cors());
 app.use(express.json());
-app.use(unless(decodeIDToken, '/v0.2.0'));
+app.use(unless(decodeIDToken, '/v0.2.0', '/broadmap/subscribe'));
 app.use('/v0.2.0', utils);
+app.use('/broadmap', broadmap);
 app.use('/v0.2.0/resume', resume);
 app.use('/v0.2.0/meta', resumeMeta);
 app.use('/v0.2.0/settings', userSettings);
