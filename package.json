@@ -1,6 +1,6 @@
 {
   "name": "resuminator-server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Backend Service for Resuminator",
   "main": "dist/index.js",
   "scripts": {
