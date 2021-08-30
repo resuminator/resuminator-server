@@ -36,9 +36,9 @@ const publicationValidation = (
     articleTitle: Joi.string().allow('').required(),
     volumeNumber: Joi.string().allow('').required(),
     issueNumber: Joi.string().allow('').required(),
-    pages: Joi.number().allow('').required(),
+    pages: Joi.string().allow('').required(),
     year: Joi.number().allow('').required(),
-    format: Joi.string().valid('MLA', 'AMA').required(),
+    format: Joi.string().valid('MLA', 'APA').required(),
     doi: Joi.string().allow('').required(),
   });
 

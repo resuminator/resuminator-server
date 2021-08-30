@@ -226,16 +226,16 @@ const Publications = {
     type: String,
   },
   volumeNumber: {
-    type: Number,
+    type: String,
   },
   issueNumber: {
-    type: Number,
+    type: String,
   },
   pages: {
-    type: Number,
+    type: String,
   },
   year: {
-    type: Number,
+    type: String,
   },
   format: {
     type: String,
