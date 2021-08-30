@@ -48,7 +48,7 @@ mongoose.connect(
       console.log(err.message);
       console.log(err);
     } else {
-      console.log('Connected to MongoDB');
+      console.log('[INFO] MongoDB Connected');
     }
   },
 );

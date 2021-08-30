@@ -26,12 +26,14 @@ import { Resume } from '../resume/resume.controller';
 import { createSettings } from '../userSettings/settings.controller';
 import { ResumeMeta } from './meta.interface';
 import { ResumeMetaSchema } from './meta.model';
+import axios, { AxiosRequestConfig } from 'axios';
+import { SGConfig } from '../config/sendgrid.config';
 
 export const Meta = model('Meta', ResumeMetaSchema);
 
 const getMeta = async (req: Request, res: Response) => {
   try {
-    const meta = await findMetaAndCreate(req.username, req.email);
+    const meta = await findMetaAndCreate(req.username, req.email, req.name);
     client.capture({
       distinctId: req.username,
       event: 'Retrieve ResumeMeta',
@@ -164,7 +166,48 @@ export async function findMeta(username: string): Promise<ResumeMeta> {
   }
 }
 
-async function findMetaAndCreate(id: string, email: string) {
+async function newAccountMail(name: string, email: string) {
+  const data = JSON.stringify({
+    from: {
+      email: SGConfig.email,
+    },
+    personalizations: [
+      {
+        to: [
+          {
+            email: email,
+          },
+        ],
+        dynamic_template_data: {
+          name: name,
+        },
+      },
+    ],
+    template_id: SGConfig.new,
+  });
+
+  const config: AxiosRequestConfig = {
+    method: 'post',
+    url: 'https://api.sendgrid.com/v3/mail/send',
+    headers: {
+      Authorization: `Bearer ${SGConfig.api}`,
+      'Content-Type': 'application/json',
+    },
+    data: data,
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log('[INFO] Email Sent');
+    })
+    .catch(function (error) {
+      console.log('[INFO] Email Failed');
+    });
+
+  return;
+}
+
+async function findMetaAndCreate(id: string, email: string, name: string) {
   try {
     let meta = await Meta.findOne({ uid: id });
     if (meta) {
@@ -173,6 +216,7 @@ async function findMetaAndCreate(id: string, email: string) {
       meta = await createMeta(id);
       const settings = await createSettings(id);
       if (settings && meta) {
+        await newAccountMail(name, email);
         client.identify({
           distinctId: id,
           properties: {
