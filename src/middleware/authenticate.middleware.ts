@@ -43,6 +43,7 @@ async function decodeIDToken(req: Request, res: Response, next: NextFunction) {
       if (decodedToken.email_verified) {
         req.username = decodedToken.uid;
         req.email = decodedToken.email || '';
+        req.name = decodedToken.name || '';
       } else {
         return res.status(403).json({
           message: 'User Not Verified',

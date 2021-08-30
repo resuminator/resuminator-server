@@ -26,6 +26,8 @@ import { MainConfig } from '../config/main.config';
 import { Resume } from '../resume/resume.controller';
 import { Meta } from '../resumeMeta/meta.controller';
 import { RequestAccountData } from './settings.model';
+import axios, { AxiosRequestConfig } from 'axios';
+import { SGConfig } from '../config/sendgrid.config';
 
 export const AccountData = model('AccountData', RequestAccountData);
 
@@ -48,6 +50,7 @@ const deleteAccount = async (req: Request, res: Response) => {
         environment: MainConfig.env,
       },
     });
+    await deleteAccountMail(req.name, req.email);
     res.status(200).json({
       message: 'Deleted',
     });
@@ -103,6 +106,48 @@ const accountDataRequest = async (req: Request, res: Response) => {
     });
   }
 };
+
+async function deleteAccountMail(name: string, email: string) {
+  const data = JSON.stringify({
+    from: {
+      email: SGConfig.email,
+    },
+    personalizations: [
+      {
+        to: [
+          {
+            email: email,
+          },
+        ],
+        dynamic_template_data: {
+          name: name,
+          email: email,
+        },
+      },
+    ],
+    template_id: SGConfig.del,
+  });
+
+  const config: AxiosRequestConfig = {
+    method: 'post',
+    url: 'https://api.sendgrid.com/v3/mail/send',
+    headers: {
+      Authorization: `Bearer ${SGConfig.api}`,
+      'Content-Type': 'application/json',
+    },
+    data: data,
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log('[INFO] Email Sent');
+    })
+    .catch(function (error) {
+      console.log('[INFO] Email Failed');
+    });
+
+  return;
+}
 
 async function getSettings(uid: string) {
   try {
