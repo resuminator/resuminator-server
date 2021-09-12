@@ -29,6 +29,7 @@ const projectValidation = (req: Request, res: Response, next: NextFunction) => {
     _id: Joi.string().required(),
     isHidden: Joi.boolean().required(),
     projectName: Joi.string().allow('').required(),
+    additionalInfo: Joi.string().allow('').required(),
     start: [Joi.date().required(), Joi.allow(null)],
     end: [Joi.date().optional(), Joi.allow(null)],
     description: Joi.string().allow('').required(),
