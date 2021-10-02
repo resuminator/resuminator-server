@@ -167,44 +167,49 @@ export async function findMeta(username: string): Promise<ResumeMeta> {
 }
 
 async function newAccountMail(name: string, email: string) {
-  const data = JSON.stringify({
-    from: {
-      email: SGConfig.email,
-    },
-    personalizations: [
-      {
-        to: [
-          {
-            email: email,
-          },
-        ],
-        dynamic_template_data: {
-          name: name,
-        },
+  if (SGConfig.api === 'demokey') {
+    console.log(`Email would have been dispatched to ${email}`);
+    return;
+  } else {
+    const data = JSON.stringify({
+      from: {
+        email: SGConfig.email,
       },
-    ],
-    template_id: SGConfig.new,
-  });
-
-  const config: AxiosRequestConfig = {
-    method: 'post',
-    url: 'https://api.sendgrid.com/v3/mail/send',
-    headers: {
-      Authorization: `Bearer ${SGConfig.api}`,
-      'Content-Type': 'application/json',
-    },
-    data: data,
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log('[INFO] Email Sent');
-    })
-    .catch(function (error) {
-      console.log('[INFO] Email Failed');
+      personalizations: [
+        {
+          to: [
+            {
+              email: email,
+            },
+          ],
+          dynamic_template_data: {
+            name: name,
+          },
+        },
+      ],
+      template_id: SGConfig.new,
     });
 
-  return;
+    const config: AxiosRequestConfig = {
+      method: 'post',
+      url: 'https://api.sendgrid.com/v3/mail/send',
+      headers: {
+        Authorization: `Bearer ${SGConfig.api}`,
+        'Content-Type': 'application/json',
+      },
+      data: data,
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log('[INFO] Email Sent');
+      })
+      .catch(function (error) {
+        console.log('[INFO] Email Failed');
+      });
+
+    return;
+  }
 }
 
 async function findMetaAndCreate(id: string, email: string, name: string) {

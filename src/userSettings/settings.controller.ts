@@ -108,45 +108,50 @@ const accountDataRequest = async (req: Request, res: Response) => {
 };
 
 async function deleteAccountMail(name: string, email: string) {
-  const data = JSON.stringify({
-    from: {
-      email: SGConfig.email,
-    },
-    personalizations: [
-      {
-        to: [
-          {
+  if (SGConfig.api === 'demokey') {
+    console.log(`Email would have been dispatched to ${email}`);
+    return;
+  } else {
+    const data = JSON.stringify({
+      from: {
+        email: SGConfig.email,
+      },
+      personalizations: [
+        {
+          to: [
+            {
+              email: email,
+            },
+          ],
+          dynamic_template_data: {
+            name: name,
             email: email,
           },
-        ],
-        dynamic_template_data: {
-          name: name,
-          email: email,
         },
-      },
-    ],
-    template_id: SGConfig.del,
-  });
-
-  const config: AxiosRequestConfig = {
-    method: 'post',
-    url: 'https://api.sendgrid.com/v3/mail/send',
-    headers: {
-      Authorization: `Bearer ${SGConfig.api}`,
-      'Content-Type': 'application/json',
-    },
-    data: data,
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log('[INFO] Email Sent');
-    })
-    .catch(function (error) {
-      console.log('[INFO] Email Failed');
+      ],
+      template_id: SGConfig.del,
     });
 
-  return;
+    const config: AxiosRequestConfig = {
+      method: 'post',
+      url: 'https://api.sendgrid.com/v3/mail/send',
+      headers: {
+        Authorization: `Bearer ${SGConfig.api}`,
+        'Content-Type': 'application/json',
+      },
+      data: data,
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log('[INFO] Email Sent');
+      })
+      .catch(function (error) {
+        console.log('[INFO] Email Failed');
+      });
+
+    return;
+  }
 }
 
 async function getSettings(uid: string) {
