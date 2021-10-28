@@ -20,7 +20,6 @@
 
 import * as Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import { string } from 'joi';
 import { validateRequest } from '../../common/main.validator';
 import { ResumeConfig } from '../../config/resume.config';
 
@@ -37,7 +36,7 @@ const experienceValidation = (
     location: Joi.string().allow('').required(),
     description: Joi.string().allow('').required(),
     link: Joi.string().uri().allow('').required(),
-    tags: Joi.array().items(string()),
+    tags: Joi.array().items(Joi.string()),
     start: Joi.date().required(),
     end: [Joi.date().optional(), Joi.allow(null)],
   });

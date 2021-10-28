@@ -19,7 +19,6 @@
 */
 
 import * as Joi from 'joi';
-import { string } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { validateRequest } from '../../../common/main.validator';
 
@@ -29,7 +28,7 @@ const templateInputValidation = (
   next: NextFunction,
 ) => {
   const schema = Joi.object({
-    inputs: Joi.array().items(string()).required(),
+    inputs: Joi.array().items(Joi.string()).required(),
   });
 
   validateRequest(req, res, next, schema);
