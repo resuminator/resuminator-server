@@ -19,7 +19,6 @@
 */
 import * as Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import { string } from 'joi';
 import { validateRequest } from '../../../common/main.validator';
 import { ResumeConfig } from '../../../config/resume.config';
 
@@ -32,7 +31,7 @@ const skillDataValidation = (
     _id: Joi.string().required(),
     isHidden: Joi.boolean().required(),
     category: Joi.string().allow('').required(),
-    skillsList: Joi.array().items(string().allow(null).allow('')).required(),
+    skillsList: Joi.array().items(Joi.string().allow(null).allow('')).required(),
   });
 
   const schema = Joi.object({

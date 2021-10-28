@@ -19,7 +19,6 @@
 */
 
 import * as Joi from 'joi';
-import { string } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { validateRequest } from '../../common/main.validator';
 import { ResumeConfig } from '../../config/resume.config';
@@ -34,7 +33,7 @@ const projectValidation = (req: Request, res: Response, next: NextFunction) => {
     end: [Joi.date().optional(), Joi.allow(null)],
     description: Joi.string().allow('').required(),
     link: Joi.string().uri().allow('').required(),
-    tags: Joi.array().items(string()),
+    tags: Joi.array().items(Joi.string()),
   });
 
   const schema = Joi.array().max(ResumeConfig.projectCount).items(base);

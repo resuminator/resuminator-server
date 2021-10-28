@@ -19,7 +19,6 @@
 */
 
 import * as Joi from 'joi';
-import { array, string } from 'joi';
 import { Request, Response, NextFunction } from 'express';
 import { validateRequest } from '../../../common/main.validator';
 
@@ -31,13 +30,13 @@ const templateLayoutValidation = (
   const layout = Joi.object().keys({
     header: Joi.array()
       .items(
-        array().items(
-          string().valid('USER_IMAGE', 'SOCIAL_HANDLES', 'NAME_AND_JT'),
+        Joi.array().items(
+          Joi.string().valid('USER_IMAGE', 'SOCIAL_HANDLES', 'NAME_AND_JT'),
         ),
       )
       .required(),
-    body: Joi.array().items(array().items(string())).required(),
-    footer: Joi.array().items(string()).required(),
+    body: Joi.array().items(Joi.array().items(Joi.string())).required(),
+    footer: Joi.array().items(Joi.string()).required(),
   });
 
   const schema = Joi.object({
