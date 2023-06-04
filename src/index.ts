@@ -22,6 +22,8 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import PostHog from 'posthog-node';
+import serverless from 'serverless-http';
+import broadmap from './broadmap/broadmap.routes';
 import unless from './common/unless';
 import { MongoConfig } from './config/mongodb.config';
 import { PostHogConfig } from './config/posthog.config';
@@ -30,10 +32,8 @@ import resume from './resume/resume.routes';
 import resumeMeta from './resumeMeta/meta.routes';
 import userSettings from './userSettings/settings.routes';
 import utils from './utils/utils.routes';
-import broadmap from './broadmap/broadmap.routes';
 
 const app = express();
-const port = process.env.PORT || 8080;
 
 mongoose.connect(
   MongoConfig.uri,
@@ -65,6 +65,5 @@ app.use('/broadmap', broadmap);
 app.use('/v0.2.0/resume', resume);
 app.use('/v0.2.0/meta', resumeMeta);
 app.use('/v0.2.0/settings', userSettings);
-app.listen(port, () => {
-  console.info(`[INFO] Server Started on PORT: ${port}`);
-});
+
+module.exports.handler = serverless(app);

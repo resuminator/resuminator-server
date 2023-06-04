@@ -1,0 +1,70 @@
+service: resuminator
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ap-south-1
+  memorySize: 256
+  timeout: 10
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+package:
+  individually: true
+
+custom:
+  dotenv:
+    logging: false
+  webpack:
+    packager: yarn
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+  serverless-offline-env:
+    path: .env
+  serverless-offline:
+    httpPort: ${env:PORT, '8080'}
+  
+
+
+functions:
+  server:
+    handler: src/index.handler
+    events: 
+      - http: 
+          path: /{proxy+}
+          method: ANY
+          cors: true
+    environment:
+      NODE_ENV: ${self:provider.stage}
+      DB_URI: ${env:DB_URI}
+      FIREBASE_TYPE: ${env:FIREBASE_TYPE}
+      FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
+      FIREBASE_PRIVATE_KEY_ID: ${env:FIREBASE_PRIVATE_KEY_ID}
+      FIREBASE_PRIVATE_KEY: ${env:FIREBASE_PRIVATE_KEY}
+      FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
+      FIREBASE_CLIENT_ID: ${env:FIREBASE_CLIENT_ID}
+      FIREBASE_AUTH_URI: ${env:FIREBASE_AUTH_URI}
+      FIREBASE_TOKEN_URI: ${env:FIREBASE_TOKEN_URI}
+      FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${env:FIREBASE_AUTH_PROVIDER_X509_CERT_URL}
+      FIREBASE_CLIENT_X509_CERT_URL: ${env:FIREBASE_CLIENT_X509_CERT_URL}
+      POSTHOG_API_KEY: ${env:POSTHOG_API_KEY}
+      POSTHOG_HOST: ${env:POSTHOG_HOST}
+      BROADMAP: ${env:BROADMAP}
+      CERTIFICATION_COUNT: ${env:CERTIFICATION_COUNT}
+      CUSTOM_SECTION_COUNT: ${env:CUSTOM_SECTION_COUNT}
+      EDUCATION_COUNT: ${env:EDUCATION_COUNT}
+      EXPERIENCE_COUNT: ${env:EXPERIENCE_COUNT}
+      NPM_CONFIG_PRODUCTION: ${env:NPM_CONFIG_PRODUCTION}
+      PROJECT_COUNT: ${env:PROJECT_COUNT}
+      SKILL_COUNT: ${env:SKILL_COUNT}
+      PUBLICATION_COUNT: ${env:PUBLICATION_COUNT}
+      RESUME_COUNT: ${env:RESUME_COUNT}
+      SG_API: ${env:SG_API}
+      SG_DEL_ACC: ${env:SG_DEL_ACC}
+      SG_EMAIL: ${env:SG_EMAIL}
+      SG_NEW_ACC: ${env:SG_NEW_ACC}
